@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
-function App() {
+export default function App() {
+  const [resourceType, setResourceType] = useState("posts");
+  const [items, setItems] = useState([]);
+
+  // console.log("render");
+
+  useEffect(() => {
+    fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
+      .then((response) => response.json())
+      .then((json) => setItems(json));
+  }, [resourceType]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={() => setResourceType("posts")}>Posts</button>
+      <button onClick={() => setResourceType("users")}>users</button>
+      <button onClick={() => setResourceType("comments")}>comments</button>
+
+      <h1>{resourceType}</h1>
+      {items.map((item) => {
+        return <pre>{JSON.stringify(item)}</pre>
+      })}
+    </>
   );
 }
 
-export default App;
+// function App() {
+//   const [count, setCount] = useState(15);
+
+//   function decrementCount() {
+//     setCount((prevCount) => prevCount - 1);
+//   }
+
+//   function incrementCount() {
+//     setCount((prevCount) => prevCount + 1);
+//   }
+//   return (
+//     <>
+//       <button onClick={decrementCount}>-</button>
+//       <span>{count - 10}</span>
+//       <button onClick={incrementCount}>+</button>
+//     </>
+//   );
+// }
+
+// export default App;
